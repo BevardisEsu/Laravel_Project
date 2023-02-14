@@ -24,20 +24,21 @@ class OrderDetails extends Model
 
     //Kintamieji kurių negalima keisti, jie bus užpildyti patys
 
-    protected $guarded = [
 
-        'id',
-        'price',
-        'status_id',
-    ];
 
     //Kintamieji kurie gali būti pildomi, tačiau pildomi vartotojo
 
     protected $fillable = [
 
-        'quantity',
+       'order_id',
         'product_name',
-        'order_id',
         'product_id',
+        'quantinty',
+        'price',
+        'status_id'
     ];
+    public function odetails()
+    {
+        return $this->belongsTo(Orders::class);
+    }
 }

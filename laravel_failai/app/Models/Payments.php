@@ -22,7 +22,6 @@ class Payments extends Model
 
     protected $guarded = [
 
-        'status_id',
         'id',
     ];
 
@@ -30,11 +29,12 @@ class Payments extends Model
 
     protected $fillable = [
 
-        'order_id',
+        'name',
         'amount',
+        'status_id'
     ];
 
-    public function payment()
+    public function payments()
     {
         return $this->belongsTo(Status::class);
     }

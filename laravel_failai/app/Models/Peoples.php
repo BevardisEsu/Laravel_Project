@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Database\Seeders\addresses;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,9 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property carbon $created_at
  * @property carbon $updated_at
  */
-
-
-class Persons extends Model
+class Peoples extends Model
 {
     use HasFactory;
 
@@ -29,8 +28,6 @@ class Persons extends Model
     protected $guarded = [
 
         'id',
-        'user_id',
-        'address_id',
     ];
 
     //Kintamieji kurie gali būti pildomi, tačiau pildomi vartotojo
@@ -38,13 +35,15 @@ class Persons extends Model
     protected $fillable = [
 
         'name',
-        'last_name',
+        'surname',
         'personal_code',
         'email',
-        'phone'
+        'phone',
+        'user_id',
+        'address_id',
     ];
 
-    public function person()
+    public function peoples()
     {
         return $this->belongsTo(User::class);
     }

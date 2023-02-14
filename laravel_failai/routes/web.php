@@ -1,18 +1,20 @@
 <?php
 
-use App\Http\Controllers\AddressesController;
-use App\Http\Controllers\CartsController;
+use App\Http\Controllers\Administrator\AddressesController;
+use App\Http\Controllers\Administrator\CategoriesController;
+use App\Http\Controllers\Administrator\DashboardController;
+use App\Http\Controllers\Administrator\OrdersController;
+use App\Http\Controllers\Administrator\OrdersDetailsController;
+use App\Http\Controllers\Administrator\PaymentController;
+use App\Http\Controllers\Administrator\PaymentsTypesController;
+use App\Http\Controllers\Administrator\PeoplesController;
+use App\Http\Controllers\Administrator\ProductsController;
+use App\Http\Controllers\Administrator\StatusesController;
+use App\Http\Controllers\Administrator\SubCategoriesController;
+use App\Http\Controllers\Administrator\UsersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\OrdersController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PersonsController;
-use App\Models\address;
-use App\Models\Carts;
-use App\Models\Orders;
-use App\Models\Payments;
-use App\Models\Persons;
-use App\Models\Products;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,69 +30,36 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class);
 
-/*Route::resource([
-    'products'=>ProductController::class,
-    'categories'=>'Neturiu controlerio',
-    'orders'=>OrdersController::class,
-    'addresses'=>AddressesController::class,
-    'persons'=>PersonsController::class,
-    'payments'=>PaymentController::class,
-    ])''
+Route::get('product/{product:slug}',[ProductController::class, 'show'])->name('product.show');
+Route::get('statuses/{status:type}',[StatusesController::class, 'show'])->name('status.show');
 
-]);*/
+//Dashboard kontrolerio įdiegimas
+
+Route::get('/', DashboardController::class)->name('administrator.dashboard');
 
 
 
 
+//Grupė grupėje nurodant lokalę
+Route::group(['middleware'=> SetLocale::class],function(){
+    Route::get('/',HomeController::class);
+    // Nurodoma, kad dabar bus localhost/administrator/route
+    Route::group(['prefix'=>'administrator', 'name'=>'admin'], function(){
+        Route::resources([
+            'products'=>ProductsController::class,
+            'categories'=> CategoriesController::class,
+            'subcategories'=> SubCategoriesController::class, // Susitvarkyti, erroras:
+            'orders'=>OrdersController::class,
+            'odetails'=> OrdersDetailsController::class,
+            'addresses'=>AddressesController::class,
+            'peoples'=>PeoplesController::class,
+            'payments'=>PaymentController::class,
+            'ptypes'=> PaymentsTypesController::class,
+            'users'=> UsersController::class,
+            'statuses'=> StatusesController::class
+        ]);
+    });
 
-            //Viskas su adresais
-
-Route::get('/address/{address}',[AddressesController::class, 'show']);
-
-Route::get('/addresses', function(){
-    return Address::query()->with('user')->get();
-});
-
-            //Viskas su Cartsais
-
-/*Route::get('/carts/{cart}',[CartsController::class,'show']);
-
-Route::get('/carts',function (){
-    return Carts::query()->with('carts')->get();
-
-});*/ //TODO Išsiaiškinti kaip apjungti du ryšius ir tada sutvarkyti
-
-
-            //Viskas su orders
-
-/*Route::get('/orders/{orders}', [OrdersController::class, 'show']);
-
-Route::get('/orders',function (){
-    return Orders::query()->with('orders')->get();
-});*/ //TODO Neveikia apjungimas nes nesutvarkytos migracijos, per savaitgalį op op nuo nulio pasidaryti viską
-
-                    //Viskas su Payments
-
-Route::get('/payments/{payments}',[PaymentController::class, 'show']);
-
-
-Route::get('/payments', function(){
-    return Payments::query()->with('payment')->get();
-});
-
-                    //Viskas su Persons
-
-Route::get('/persons/{persons}',[PersonsController::class,'show']);
-
-Route::get('/persons',function () {
-    return Persons::query()->with('person')->get();
-});
-
-
-Route::get( '/products/{products}', [ProductController::class, 'show']);
-
-Route::get('/products', function () {
-    return Products::query()->with('category')->get();
 });
 
 
@@ -99,14 +68,6 @@ Route::get('/products', function () {
 
 
 
-
-
-
-
-/*Route::get('/order', function() {
-    return Orders::query()->with('cart')->get();
-
-});*/
 
 
 

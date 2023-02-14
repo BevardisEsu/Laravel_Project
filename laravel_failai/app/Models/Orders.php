@@ -3,20 +3,22 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Database\Seeders\Cart;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
- * @property int $id
- * @property int $user_id
- * @property int $shipping_address_id
- * @property int $billing_address_id
- * @property int $payment_id
- * @property int $status_id
- * @property carbon $created_at
- * @property carbon $updated_at
+ * @property string $id
+ * @property string $name
+ * @property string $slug
+ * @property string $description
+ * @property string $image
+ * @property int $category_id
+ * @property int $price
+ * @property string $status
+ * @property int $cart_id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Orders extends Model
 {
@@ -27,17 +29,18 @@ class Orders extends Model
 
     protected $guarded = [
         'id',
-        'user_id',
-        'payment_id',
-        'status_id',
+
     ];
 
     //Kintamieji kurie gali būti pildomi MassAssignment metu
 
     protected $fillable =[
 
+        'name',
+        'user_id',
+        'payment_id',
+        'status_id',
         'shipping_address_id',
-        'billing_address_id',
     ];
 
 
